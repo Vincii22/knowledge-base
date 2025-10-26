@@ -1,0 +1,48 @@
+# In root directory
+nano .gitignore
+```
+
+Add this content:
+```
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env.local
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Build outputs
+backend/dist/
+frontend/dist/
+
+# Database
+*.db
+*.db-journal
+
+# Prisma
+backend/prisma/migrations/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
