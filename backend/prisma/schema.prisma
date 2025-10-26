@@ -1,15 +1,105 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User Model
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  usename       String      @unique
+  password      String
+  name          String?
+  role          UserRole   @default(VIEWER)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  articles      Article[]
+  comments      Comment[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+// Article Model
+model Article {
+  id            String      @id @default(uuid())
+  title         String
+  slug          String      @unique
+  content       String      @db.Text
+  excerpt       String?     @db.Text
+  isPublished   Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tags          Tag[]
+  comments      Comment[]
+
+  @@index([authorId])
+  @@index([categoryId]) 
+  @@index([slug])
+  @@map("articles")
+
+}
+
+// Category Model
+model Category {
+  id            String      @id @default(uuid())
+  name          String      @unique
+  slug          String      @unique
+  description   String?     
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  articles      Article[]
+
+  @@map("categories")
+}
+
+// Tag Model
+model Tag {
+  id            String      @id @default(uuid())
+  name          String      @unique
+  slug          String      @unique
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt    
+
+  // Relations
+  articles      Article[]  
+  @@map("tags")
+}
+
+// Comment Model
+model Comment {
+  id            String      @id @default(uuid())
+  content       String      @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  authorId      String
+  author        User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  articleId     String
+  article       Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([articleId])
+  @@map("comments")
+}
+
