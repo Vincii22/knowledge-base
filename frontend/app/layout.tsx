@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ApolloProvider } from "@/lib/apollo/ApolloProvider";
-import { SessionProvider } from "@/components/auth/SessionProvider";
+import { ApolloWrapper } from "@/components/providers/ApolloWrapper";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <ApolloProvider>
+          <ApolloWrapper>
             {children}
-          </ApolloProvider>
+          </ApolloWrapper>
         </SessionProvider>
       </body>
     </html>
