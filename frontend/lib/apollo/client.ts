@@ -9,7 +9,7 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, { headers }) => {
   // Get token from localStorage
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  
+
   return {
     headers: {
       ...headers,
@@ -18,13 +18,19 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+// CORRECTED errorLink definition for Apollo Client v4
+// Accept the full error object and access properties directly
+const errorLink = onError((error: any) => { 
+  const { graphQLErrors, networkError } = error; // Access properties from the error object
+
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) => {
+    // You can also destructure inside the loop for proper typing
+    graphQLErrors.forEach((graphQLError: any) => {
+      const { message, locations, path } = graphQLError; // Destructure with implicit/explicit 'any' for now
       console.error(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
     });
   }
-  
+
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
   }
