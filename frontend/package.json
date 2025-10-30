@@ -10,9 +10,13 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "@tiptap/extension-code-block-lowlight": "^3.10.0",
+    "@tiptap/extension-link": "^3.10.0",
+    "@tiptap/extension-placeholder": "^3.10.0",
     "@tiptap/react": "^3.8.0",
     "@tiptap/starter-kit": "^3.8.0",
     "graphql": "^16.11.0",
+    "lowlight": "^3.3.0",
     "lucide-react": "^0.548.0",
     "next": "14.2.18",
     "next-auth": "^4.24.10",

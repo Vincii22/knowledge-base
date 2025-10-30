@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useMutation, gql } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import MainLayout from '@/components/layout/MainLayout';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
@@ -24,6 +24,28 @@ const REGISTER_MUTATION = gql`
   }
 `;
 
+interface RegisterData {
+  register: {
+    token: string;
+    user: {
+      id: string;
+      email: string;
+      username: string;
+      name?: string;
+      role: string;
+    };
+  };
+}
+
+interface RegisterVariables {
+  input: {
+    email: string;
+    username: string;
+    password: string;
+    name?: string;
+  };
+}
+
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -35,16 +57,19 @@ export default function RegisterPage() {
     name: '',
   });
 
-  const [register, { loading }] = useMutation(REGISTER_MUTATION, {
-    onCompleted: (data) => {
-      // Save token to localStorage
-      localStorage.setItem('token', data.register.token);
-      router.push('/login');
-    },
-    onError: (err) => {
-      setError(err.message);
-    },
-  });
+  const [register, { loading }] = useMutation<RegisterData, RegisterVariables>(
+    REGISTER_MUTATION,
+    {
+      onCompleted: (data: RegisterData) => {
+        // Save token to localStorage
+        localStorage.setItem('token', data.register.token);
+        router.push('/login');
+      },
+      onError: (err: Error) => {
+        setError(err.message);
+      },
+    }
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +99,7 @@ export default function RegisterPage() {
       });
     } catch (err) {
       // Error handled by onError callback
+      console.error('Registration error:', err);
     }
   };
 

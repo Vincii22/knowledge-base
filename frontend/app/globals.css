@@ -37,3 +37,47 @@
     @apply text-primary-600 hover:text-primary-700 hover:underline transition-colors;
   }
 }
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror pre {
+  background: #1e293b;
+  color: #f8f8f2;
+  font-family: 'JetBrainsMono', monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #fbbf24;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #64748b;
+}
+
+.ProseMirror a {
+  color: #1e40af;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #1e3a8a;
+}
